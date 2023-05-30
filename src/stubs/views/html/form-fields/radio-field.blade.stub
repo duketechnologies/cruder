@@ -1,0 +1,20 @@
+<fieldset>
+    <div class="space-y-2">
+        <div class="relative flex items-start">
+            <div class="flex h-5 items-center">
+                <input id="small" aria-describedby="small-description" value="1" name="%%itemName%%" type="radio" {{ (isset($%%crudNameSingular%%) && 1 == $%%crudNameSingular%%->%%itemName%%) ? 'checked' : '' }} class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500">
+            </div>
+            <div class="ml-3 text-sm">
+                <label for="small" class="font-medium text-gray-700"> {!! __('dashboard.yes')!!} </label>
+            </div>
+        </div>
+        <div class="relative flex items-start">
+            <div class="flex h-5 items-center">
+                <input id="medium" aria-describedby="medium-description" value="0" name="%%itemName%%" type="radio" @if (isset($%%crudNameSingular%%)) {{ (0 == $%%crudNameSingular%%->%%itemName%%) ? 'checked' : '' }} @else {{ 'checked' }} @endif class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500">
+            </div>
+            <div class="ml-3 text-sm">
+                <label for="medium" class="font-medium text-gray-700"> {!! __('dashboard.no')!!} </label>
+            </div>
+        </div>
+    </div>
+</fieldset>

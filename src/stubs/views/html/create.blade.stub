@@ -1,0 +1,157 @@
+@extends('layouts.dashboard')
+@section('page-header')
+    <div class="pb-2 flex sm:items-left sm:justify-left items-center">
+        <a href="{{ url('/%%routeGroup%%%%viewName%%') }}" title="Back">
+            <button class="inline-flex items-center rounded-md border border-transparent bg-gray-600 px-2 py-2 mr-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                    <path fill-rule="evenodd" d="M7.22 3.22A.75.75 0 017.75 3h9A2.25 2.25 0 0119 5.25v9.5A2.25 2.25 0 0116.75 17h-9a.75.75 0 01-.53-.22L.97 10.53a.75.75 0 010-1.06l6.25-6.25zm3.06 4a.75.75 0 10-1.06 1.06L10.94 10l-1.72 1.72a.75.75 0 101.06 1.06L12 11.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L12 8.94l-1.72-1.72z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </a>
+        <h3 class="text-sm md:text-lg font-medium leading-6 text-gray-900">{!! __('dashboard.create') !!} %%modelName%%</h3>
+    </div>
+@endsection
+
+@section('content')
+
+    <div class="mt-6 flex flex-col">
+        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg bg-white px-8 py-8">
+
+
+                    @if ($errors->any())
+                        <div class="rounded-md bg-red-50 p-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <!-- Heroicon name: mini/x-circle -->
+                                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-red-800">{!! __('dashboard.errors') !!}</h3>
+                                    <div class="mt-2 text-sm text-red-700">
+                                        <ul role="list" class="list-disc space-y-1 pl-5">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+
+
+
+                    <form method="POST" action="{{ url('/%%routeGroup%%%%viewName%%') }}" class="p-2" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+
+                        @include ('%%viewTemplateDir%%.form', ['formMode' => 'create'])
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<hu-transition-root as="template" :show="filterOpen" v-cloak>
+    <hu-dialog as="div" class="relative z-10" @close="filterOpen = false">
+        <div class="fixed inset-0" />
+
+        <div class="fixed inset-0 overflow-hidden">
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
+                    <hu-transition-child as="template" enter="transform transition ease-in-out duration-500 sm:duration-700" enter-from="translate-x-full" enter-to="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leave-from="translate-x-0" leave-to="translate-x-full">
+                        <hu-dialog-panel class="pointer-events-auto w-screen max-w-md">
+                            <form class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                                <div class="h-0 flex-1 overflow-y-auto">
+                                    <div class="bg-indigo-700 py-6 px-4 sm:px-6">
+                                        <div class="flex items-center justify-between">
+                                            <hu-dialog-title class="text-lg font-medium text-white">Фильтр</hu-dialog-title>
+                                            <div class="ml-3 flex h-7 items-center">
+                                                <button type="button" class="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none hover:ring-2 hover:ring-white" @click="filterOpen = false">
+                                                    <span class="sr-only">Закрыть</span>
+                                                    <hu-x-mark-icon class="h-6 w-6" aria-hidden="true" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="mt-1">
+                                            <p class="text-sm text-indigo-300">Выберите параметры для фильтрации в полях ниже</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-between">
+                                        <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                                            <div class="space-y-6 pt-6 pb-5">
+                                                <div>
+                                                    <label for="project-name" class="block text-sm font-medium text-gray-900">Project name</label>
+                                                    <div class="mt-1">
+                                                        <input type="text" name="project-name" id="project-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="description" class="block text-sm font-medium text-gray-900">Description</label>
+                                                    <div class="mt-1">
+                                                        <textarea id="description" name="description" rows="4" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
+                                                    </div>
+                                                </div>
+                                                <fieldset>
+                                                    <legend class="text-sm font-medium text-gray-900">Privacy</legend>
+                                                    <div class="mt-2 space-y-5">
+                                                        <div class="relative flex items-start">
+                                                            <div class="absolute flex h-5 items-center">
+                                                                <input id="privacy-public" name="privacy" aria-describedby="privacy-public-description" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" checked="" />
+                                                            </div>
+                                                            <div class="pl-7 text-sm">
+                                                                <label for="privacy-public" class="font-medium text-gray-900">Public access</label>
+                                                                <p id="privacy-public-description" class="text-gray-500">Everyone with the link will see this project.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <div class="relative flex items-start">
+                                                                <div class="absolute flex h-5 items-center">
+                                                                    <input id="privacy-private-to-project" name="privacy" aria-describedby="privacy-private-to-project-description" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                                                </div>
+                                                                <div class="pl-7 text-sm">
+                                                                    <label for="privacy-private-to-project" class="font-medium text-gray-900">Private to project members</label>
+                                                                    <p id="privacy-private-to-project-description" class="text-gray-500">Only members of this project would be able to access.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <div class="relative flex items-start">
+                                                                <div class="absolute flex h-5 items-center">
+                                                                    <input id="privacy-private" name="privacy" aria-describedby="privacy-private-to-project-description" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                                                </div>
+                                                                <div class="pl-7 text-sm">
+                                                                    <label for="privacy-private" class="font-medium text-gray-900">Private to you</label>
+                                                                    <p id="privacy-private-description" class="text-gray-500">You are the only one able to access this project.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-shrink-0 justify-end px-4 py-4">
+                                    <button type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="filterOpen = false">Закрыть</button>
+                                    <button type="submit" class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Найти</button>
+                                </div>
+                            </form>
+                        </hu-dialog-panel>
+                    </hu-transition-child>
+                </div>
+            </div>
+        </div>
+    </hu-dialog>
+</hu-transition-root>
+
+
+@endsection

@@ -1,0 +1,128 @@
+@extends('layouts.dashboard')
+@section('page-header')
+    <div class="border-b border-gray-200 pb-6 sm:flex sm:items-center sm:justify-between">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">%%crudNameCap%% <sup>{{ $%%crudName%%->total() }}</sup></h3>
+        <div class="mt-3 flex sm:mt-0 sm:ml-4">
+            <span @click.prevent="filterOpen = !filterOpen" class="ml-3 hidden sm:block">
+              <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+                </svg>
+                {!! __('dashboard.filter') !!}
+              </button>
+            </span>
+
+           <span class="sm:ml-3">
+              <a href="{{ url('/%%routeGroup%%%%viewName%%/create') }}" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {!! __('dashboard.add') !!}
+              </a>
+            </span>
+        </div>
+    </div>
+@endsection
+
+@section('content')
+    <div class="mt-6 flex flex-col">
+        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">#</th>
+                            %%formHeadingHtml%%
+                            <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                <span class="sr-only">Actions</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            @foreach($%%crudName%% as $item)
+                                <tr>
+                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{ $loop->iteration }}</td>
+                                    %%formBodyHtml%%
+                                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                        <a href="{{ url('/%%routeGroup%%%%viewName%%/' . $item->%%primaryKey%% . '/edit') }}" title="Update" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-2 py-2 mr-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            <svg  class="mx-auto h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                                            </svg>
+                                        </a>
+                                        <form method="POST" action="{{ url('/%%routeGroup%%%%viewName%%' . '/' . $item->%%primaryKey%%) }}" accept-charset="UTF-8" style="display:inline">
+                                            {{ method_field('DELETE') }}
+                                            {{ csrf_field() }}
+                                            <button type="submit" title="Delete" onclick="return confirm('Подтверждаете удаление?')" class="inline-flex items-center rounded-md border border-transparent bg-red-600 px-2 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mx-auto">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {!! $%%crudName%%->appends(['search' => Request::get('search')])->render('pagination::dashboard') !!}
+
+
+    <hu-transition-root as="template" :show="filterOpen" v-cloak>
+        <hu-dialog as="div" class="relative z-10" @close="filterOpen = false">
+            <div class="fixed inset-0" />
+
+            <div class="fixed inset-0 overflow-hidden">
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
+                        <hu-transition-child as="template" enter="transform transition ease-in-out duration-500 sm:duration-700" enter-from="translate-x-full" enter-to="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leave-from="translate-x-0" leave-to="translate-x-full">
+                            <hu-dialog-panel class="pointer-events-auto w-screen max-w-md">
+                                <form method="GET" action="{{ url('/%%routeGroup%%%%viewName%%') }}" class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                                    <div class="h-0 flex-1 overflow-y-auto">
+                                        <div class="bg-indigo-700 py-6 px-4 sm:px-6">
+                                            <div class="flex items-center justify-between">
+                                                <hu-dialog-title class="text-lg font-medium text-white">{!! __('dashboard.filter') !!}</hu-dialog-title>
+                                                <div class="ml-3 flex h-7 items-center">
+                                                    <button type="button" class="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none hover:ring-2 hover:ring-white" @click="filterOpen = false">
+                                                        <span class="sr-only">{!! __('dashboard.close') !!}</span>
+                                                        <hu-x-mark-icon class="h-6 w-6" aria-hidden="true" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-1">
+                                                <p class="text-sm text-indigo-300">{!! __('dashboard.choose_params') !!}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-1 flex-col justify-between">
+                                            <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                                                <div class="space-y-6 pt-6 pb-5">
+                                                        <div>
+                                                            <label for="search" class="block text-sm font-medium text-gray-900">Поиск</label>
+                                                            <div class="mt-1">
+                                                                <input type="text" name="search" id="search" value="{{ request('search') }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-shrink-0 justify-end px-4 py-4">
+                                        <button type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="filterOpen = false">{!! __('dashboard.close')!!}</button>
+                                        <button type="submit" class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">{!! __('dashboard.find')!!}</button>
+                                    </div>
+                                </form>
+                            </hu-dialog-panel>
+                        </hu-transition-child>
+                    </div>
+                </div>
+            </div>
+        </hu-dialog>
+    </hu-transition-root>
+
+
+@endsection
